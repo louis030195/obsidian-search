@@ -1,23 +1,42 @@
 {
+    "globals": {
+      "React": true,
+      "JSX": true
+    },
     "root": true,
     "parser": "@typescript-eslint/parser",
     "env": { "node": true },
     "plugins": [
-      "@typescript-eslint"
+      "@typescript-eslint",
+      "react"
     ],
     "extends": [
       "eslint:recommended",
       "plugin:@typescript-eslint/eslint-recommended",
-      "plugin:@typescript-eslint/recommended"
+      "plugin:@typescript-eslint/recommended",
+      "plugin:react/recommended"
     ], 
     "parserOptions": {
-        "sourceType": "module"
+        "sourceType": "module",
+        "ecmaFeatures": {
+          "jsx": true,
+          "experimentalObjectRestSpread": true
+        }
     },
     "rules": {
-      "no-unused-vars": "off",
-      "@typescript-eslint/no-unused-vars": ["error", { "args": "none" }],
       "@typescript-eslint/ban-ts-comment": "off",
       "no-prototype-builtins": "off",
-      "@typescript-eslint/no-empty-function": "off"
+      "quotes": ["error", "double"],
+      "keyword-spacing": ["error", {
+        "before": true,
+        "after": true
+      }],
+      "key-spacing": ["error", {
+        "beforeColon": false,
+        "afterColon": true
+      }],
+      "space-infix-ops": ["error", {
+        "int32Hint": false
+      }]
     } 
   }

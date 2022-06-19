@@ -1,10 +1,11 @@
 {
 	"name": "obsidian-sample-plugin",
 	"version": "1.0.1",
-	"description": "This is a sample plugin for Obsidian (https://obsidian.md)",
+	"description": "Multimodal semantic search for obsidian",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
+		"dev-fake": "USE_FAKE_API=true node esbuild.config.mjs",
 		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
 		"version": "node version-bump.mjs && git add manifest.json versions.json"
 	},
@@ -12,13 +13,31 @@
 	"author": "",
 	"license": "MIT",
 	"devDependencies": {
+		"@types/glob": "^7.2.0",
 		"@types/node": "^16.11.6",
+		"@types/react": "^18.0.8",
+		"@types/react-dom": "^18.0.3",
 		"@typescript-eslint/eslint-plugin": "^5.2.0",
 		"@typescript-eslint/parser": "^5.2.0",
 		"builtin-modules": "^3.2.0",
 		"esbuild": "0.13.12",
+		"eslint-plugin-react": "^7.29.4",
+		"eslint-plugin-react-hooks": "^4.5.0",
 		"obsidian": "latest",
 		"tslib": "2.3.1",
 		"typescript": "4.4.4"
+	},
+	"dependencies": {
+		"@emotion/react": "^11.9.0",
+		"@emotion/styled": "^11.8.1",
+		"@mui/icons-material": "^5.6.2",
+		"@mui/lab": "^5.0.0-alpha.81",
+		"@mui/material": "^5.6.4",
+		"node-glob": "^1.2.0",
+		"obsidian-vault-parser": "^0.4.1",
+		"onnxruntime-web": "^1.11.0",
+		"react": "^18.1.0",
+		"react-dom": "^18.1.0",
+		"wasm-vips": "^0.0.2"
 	}
 }
