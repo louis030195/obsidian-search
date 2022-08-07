@@ -90,6 +90,7 @@ export class ClipRetrievalApi implements Api {
 					}
 				});
 			}));
+			// @ts-ignore
 			ret = results;
 		} catch (e) {
 			new Notice("Error processing response from API", 5000);
@@ -159,6 +160,7 @@ export class JinaApi implements Api {
 					}
 				});
 			}));
+			// @ts-ignore
 			ret = results;
 		} catch (e) {
 			new Notice("Error processing response from API", 5000);
