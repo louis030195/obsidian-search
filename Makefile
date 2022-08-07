@@ -6,7 +6,7 @@ release:
 	read -p "Commit content:" COMMIT; \
 	echo "Committing '$$VERSION: $$COMMIT'"; \
 	git commit -m "$$VERSION: $$COMMIT"; \
-	git push origin main; \
+	git push origin master; \
 	git tag v$$VERSION; \
 	git push origin v$$VERSION
 	echo "Done, check https://github.com/louis030195/obsidian-search/actions"
