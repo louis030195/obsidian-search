@@ -5,16 +5,11 @@
 
 https://user-images.githubusercontent.com/25003283/183289097-4427a19c-ddf0-476a-a2e4-0686976128af.mov
 
+## Usage
 
-## TODO
+Currently have to put the repository in YOUR_VAULT/.obsidian/plugins/obsidian-search/
 
-- [x] sentence transformers api
-- [ ] https://jina.ai
-- [ ] https://github.com/rom1504/clip-retrieval
-- [ ] client-side inference using clip + onnx
-- [ ] better embeddings (weak labelling, [domain adaptation](https://www.sbert.net/examples/domain_adaptation/README.html), multimodal...)
-
-## Development
+(Until time is invested to provide a way with less friction to do this)
 
 ### Sentence transformers
 
@@ -30,6 +25,25 @@ You might need `nltk`data:
 import nltk
 nltk.download('all')
 ```
+
+```bash
+python3 api.py --port 3000 --model multi-qa-MiniLM-L6-cos-v1
+```
+
+Then use the hotkey in Obsidian to open the search modal.
+
+For better results, you should fine-tune the model on your vault using [this notebook](./unsupervised_embedding_fine_tuning.ipynb).
+
+## TODO
+
+- [x] sentence transformers api
+- [ ] https://jina.ai
+- [ ] https://github.com/rom1504/clip-retrieval
+- [ ] client-side inference using clip + onnx
+- [ ] better embeddings (weak labelling, [domain adaptation](https://www.sbert.net/examples/domain_adaptation/README.html), multimodal...)
+
+## Development
+
 
 ### Jina
 

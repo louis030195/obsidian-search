@@ -9,10 +9,10 @@ release:
 	git push; \
 	git tag v$$VERSION; \
 	git push origin v$$VERSION
-	echo "Done, check https://github.com/louis030195/obsidian-search/actions"
+	@echo "Done, check https://github.com/louis030195/obsidian-search/actions"
 
-api:
-	python3 api.py --port 3000 --model ./output/tsdae-model
+api/finetuned:
+	python3 api.py --port 3000 --model ./output/sentence-transformers/*
 
 api/base:
 	python3 api.py --port 3000 --model multi-qa-MiniLM-L6-cos-v1
