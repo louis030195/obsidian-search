@@ -2,6 +2,8 @@
 
 ⚠️ Experimental ⚠️
 
+https://user-images.githubusercontent.com/25003283/183284095-0b562566-1da9-4498-901a-9a96eefbe61b.mov
+
 ## TODO
 
 - [x] sentence transformers api
