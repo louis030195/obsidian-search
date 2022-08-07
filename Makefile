@@ -13,3 +13,6 @@ release:
 
 api:
 	python3 api.py --port 3000 --model ./output/tsdae-model
+
+api/base:
+	python3 api.py --port 3000 --model multi-qa-MiniLM-L6-cos-v1
