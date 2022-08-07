@@ -1,13 +1,14 @@
-import { Chip, CircularProgress, Grid, InputAdornment, List, ListItem, ListItemButton, ListItemText, TextField } from "@mui/material";
-import { Notice, App, WorkspaceLeaf, getLinkpath } from "obsidian";
+import { Chip, CircularProgress, Grid, InputAdornment, List, ListItemButton, TextField } from "@mui/material";
+import { App } from "obsidian";
 import * as React from "react";
-import { Api, FakeApi, ClipRetrievalApi, SearchResponse } from "./api";
+import { Api, FakeApi, SearchResponse } from "./api";
 
 interface ReactViewProps {
   api: Api
   app: App
   onClose: () => void
 }
+
 export const SearchModalContent = ({api, app, onClose}: ReactViewProps) => {
   const [query, setQuery] = React.useState("");
   const [results, setResults] = React.useState<SearchResponse[]>([]);
@@ -17,10 +18,9 @@ export const SearchModalContent = ({api, app, onClose}: ReactViewProps) => {
     setQuery(e.target.value)
     setResults([]);
     setIsLoading(true);
-    new FakeApi /*ClipRetrievalApi*/().search(e.target.value)
+    api.search(e.target.value)
       .then((res) => {
           setResults(res);
-          console.log("query", e.target.value, "got results", res)
         })
         .finally(() => setIsLoading(false));
   };
@@ -68,9 +68,7 @@ export const SearchModalContent = ({api, app, onClose}: ReactViewProps) => {
               key={i}
               onClick={() => {
                 if (!results) return;
-                console.log("clicked", e);
                 const url = `obsidian://open?vault=brain&file=${encodeURI(e.filePath)}`;
-                console.log("url", url)
                 app.workspace.openLinkText(e.fileName, url, false, {});
                 onClose();
               }}

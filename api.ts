@@ -7,6 +7,8 @@ import { readVault, VaultPage } from "obsidian-vault-parser";
 export interface SearchResponse {
 	fileName: string
 	filePath: string
+	score?: number
+	content?: string
 }
 export interface Api {
 	search(query: string): Promise<SearchResponse[]>
@@ -80,7 +82,6 @@ export class ClipRetrievalApi implements Api {
 				})
 				.then((r) => r.json())
 				.then((metadata) => {
-					console.log("metadata", metadata);
 					const fileUrlSplitted = metadata[0].metadata.caption_url.split("/");
 					return {
 						// remove first element
@@ -150,7 +151,6 @@ export class JinaApi implements Api {
 				})
 				.then((r) => r.json())
 				.then((metadata) => {
-					console.log("metadata", metadata);
 					const fileUrlSplitted = metadata[0].metadata.caption_url.split("/");
 					return {
 						// remove first element
@@ -166,5 +166,62 @@ export class JinaApi implements Api {
 		}
 
 		return ret;
+	}
+}
+
+
+/**
+{
+  "query": "reinforcement learning",
+  "similarities": [
+    {
+      "score": 0.9303182363510132,
+      "file_name": "Bellman Equation",
+      "file_path": "Bellman Equation",
+      "file_content": "File:\nBellman Equation\n\nContent:\n# ai\n\n# computing\n\n# reinforcement-learning\n"
+    },
+  ]
+}
+ */
+interface SentenceTransformersApiResponse {
+	query: string;
+	similarities: {
+		score: number;
+		file_name: string;
+		file_path: string;
+		file_content: string;
+	}[];
+}
+/**
+curl -X POST -H "Content-Type: application/json" -d '{"query": "reinforcement learning"}' http://localhost:3000/semantic_search | jq '.'
+ */
+export class SentenceTransformersApi implements Api {
+	async search(
+		query: string,
+	): Promise<SearchResponse[]> {
+
+		const data = {
+			query: query,
+		};
+		
+		try {
+			const response = await fetch("http://localhost:3000/semantic_search", {
+				headers: { "Content-Type": "application/json" },
+				method: "POST", 
+				mode: "cors",
+				body: JSON.stringify(data)
+			});
+			const res: SentenceTransformersApiResponse = await response.json();
+			const similarities = res["similarities"];
+			return similarities.map((e) => ({
+				filePath: e.file_path,
+				fileName: e.file_name,
+				score: e.score,
+				content: e.file_content,
+			}));
+		} catch (e) {
+			new Notice("Error processing response from API", 5000);
+			return Promise.reject(e);
+		}
 	}
 }

@@ -1,7 +1,7 @@
 {
-	"name": "obsidian-sample-plugin",
-	"version": "1.0.1",
-	"description": "Multimodal semantic search for obsidian",
+	"name": "obsidian-search",
+	"version": "1.0.2",
+	"description": "Semantic search for obsidian",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",

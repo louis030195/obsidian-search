@@ -1,16 +1,33 @@
 # obsidian-search
 
+⚠️ Experimental ⚠️
 
-⚠️ Extremely experimental and dirty code ⚠️
+## TODO
 
-Currently exploring to use either
-- https://jina.ai
-- https://github.com/rom1504/clip-retrieval
-- client-side inference using clip + onnx
-- any new SOTA?
+- [x] sentence transformers api
+- [ ] https://jina.ai
+- [ ] https://github.com/rom1504/clip-retrieval
+- [ ] client-side inference using clip + onnx
+- [ ] better embeddings (weak labelling, [domain adaptation](https://www.sbert.net/examples/domain_adaptation/README.html), multimodal...)
 
+## Development
 
-## Random
+### Sentence transformers
+
+```bash
+virtualenv env
+source env/bin/activate
+pip install sentence-transformers bottle obsidiantools
+```
+
+You might need `nltk`data:
+
+```py
+import nltk
+nltk.download('all')
+```
+
+### Jina
 
 ```bash
 go install github.com/google/gnostic/cmd/protoc-gen-openapi@latest
