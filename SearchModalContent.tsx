@@ -1,12 +1,13 @@
-import { Chip, CircularProgress, Grid, InputAdornment, List, ListItemButton, TextField } from "@mui/material";
-import { App } from "obsidian";
+import {Chip, CircularProgress, Grid,
+  InputAdornment, List, ListItemButton, TextField} from "@mui/material";
+import {App} from "obsidian";
 import * as React from "react";
-import { Api, FakeApi, SearchResponse } from "./api";
+import {Api, FakeApi, SearchResponse} from "./api";
 
 interface ReactViewProps {
-  api: Api
-  app: App
-  onClose: () => void
+  api: Api;
+  app: App;
+  onClose: () => void;
 }
 
 export const SearchModalContent = ({api, app, onClose}: ReactViewProps) => {
@@ -14,12 +15,13 @@ export const SearchModalContent = ({api, app, onClose}: ReactViewProps) => {
   const [results, setResults] = React.useState<SearchResponse[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const onQueryChange = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    setQuery(e.target.value)
+  const onQueryChange = (
+      e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    setQuery(e.target.value);
     setResults([]);
     setIsLoading(true);
     api.search(e.target.value)
-      .then((res) => {
+        .then((res) => {
           setResults(res);
         })
         .finally(() => setIsLoading(false));
@@ -41,44 +43,45 @@ export const SearchModalContent = ({api, app, onClose}: ReactViewProps) => {
           />
         </Grid>
       }
-        <Grid item>
-
-    <TextField
-      value={query}
-      onChange={onQueryChange}
-      focused
-      InputProps={
-        isLoading &&
+      <Grid item>
+        <TextField
+          label="Search"
+          value={query}
+          onChange={onQueryChange}
+          focused
+          autoFocus
+          InputProps={
+            isLoading &&
         {
-        endAdornment: (
-          <InputAdornment position='end'>
-            <CircularProgress/>
-          </InputAdornment>
-        ),
-      }}
-    />
-        </Grid>
+          endAdornment: (
+            <InputAdornment position='end'>
+              <CircularProgress/>
+            </InputAdornment>
+          ),
+        }}
+        />
+      </Grid>
 
-        <Grid item>
-    <List>
-      {
-        results?.map((e, i) =>
-          
-            <ListItemButton
-              key={i}
-              onClick={() => {
-                if (!results) return;
-                const url = `obsidian://open?vault=brain&file=${encodeURI(e.filePath)}`;
-                app.workspace.openLinkText(e.fileName, url, false, {});
-                onClose();
-              }}
-            >
-              {e.fileName}
-            </ListItemButton>
-        )
-      }
-    </List>
+      <Grid item>
+        <List>
+          {
+            results?.map((e, i) =>
+
+              <ListItemButton
+                key={i}
+                onClick={() => {
+                  if (!results) return;
+                  const url = `obsidian://open?vault=brain&file=${encodeURI(e.filePath)}`;
+                  app.workspace.openLinkText(e.fileName, url, false, {});
+                  onClose();
+                }}
+              >
+                {e.fileName}
+              </ListItemButton>
+            )
+          }
+        </List>
+      </Grid>
     </Grid>
-  </Grid>
-  )
+  );
 };

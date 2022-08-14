@@ -11,6 +11,9 @@ Currently have to put the repository in YOUR_VAULT/.obsidian/plugins/obsidian-se
 
 (Until time is invested to provide a way with less friction to do this)
 
+It is intended to run the API locally in order to have access to the vault content at all time.
+Eventually some cloud deployment could be imagined.
+
 ### Sentence transformers
 
 ```bash
@@ -32,7 +35,27 @@ python3 api.py --port 3000 --model multi-qa-MiniLM-L6-cos-v1
 
 Then use the hotkey in Obsidian to open the search modal.
 
-For better results, you should fine-tune the model on your vault using [this notebook](./unsupervised_embedding_fine_tuning.ipynb).
+#### Fine-tuning
+
+For better results, you should fine-tune the model on your vault.
+
+You can either look at [this notebook](./unsupervised_embedding_fine_tuning.ipynb),
+or:
+
+```bash
+python3 ft.py --use_wandb False
+```
+
+Using [Weights & Biases](https://wandb.ai/site):
+
+```bash
+wandb login
+python3 ft.py --use_wandb True
+```
+
+### Jina
+
+TODO
 
 ## TODO
 
