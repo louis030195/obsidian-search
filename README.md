@@ -43,14 +43,14 @@ You can either look at [this notebook](./unsupervised_embedding_fine_tuning.ipyn
 or:
 
 ```bash
-python3 ft.py --use_wandb False
+python3 ft.py fine_tune --use_wandb False
 ```
 
 Using [Weights & Biases](https://wandb.ai/site):
 
 ```bash
 wandb login
-python3 ft.py --use_wandb True
+python3 ft.py fine_tune --use_wandb True
 ```
 
 ### Jina
