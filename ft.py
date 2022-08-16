@@ -48,6 +48,7 @@ def st_ft(
     model_name="sentence-transformers/multi-qa-MiniLM-L6-cos-v1",
     epochs: int = 10,
     evaluation_dataset_path: str = None,
+    save: bool = True,
 ):
     """
     Fine-tune a Sentence Transformer model.
@@ -55,6 +56,8 @@ def st_ft(
     :param use_wandb: Whether to use wandb.
     :param model_name: Model name.
     :param epochs: Number of epochs.
+    :param evaluation_dataset_path: Path to the evaluation dataset.
+    :param save: Whether to save the model.
     """
     # if model seems to be local directory, print something to say it
     if os.path.isdir(model_name):
@@ -76,7 +79,6 @@ def st_ft(
     )
     model = SentenceTransformer(modules=[word_embedding_model, pooling_model])
 
-
     if evaluation_dataset_path:
         # check it's a json file
         assert evaluation_dataset_path.endswith(
@@ -88,14 +90,20 @@ def st_ft(
         )
 
         # check columns are sentences1, sentences2, scores
-        assert (
-            ["sentences1", "sentences2", "scores"] == evaluation_dataset.columns
-        ), "Evaluation dataset must have columns sentences1, sentences2, scores"
+        assert [
+            "sentences1",
+            "sentences2",
+            "scores",
+        ] == evaluation_dataset.columns.to_list(), (
+            "Evaluation dataset must have columns sentences1, sentences2, scores"
+        )
 
         from sentence_transformers import evaluation
 
         evaluator = evaluation.EmbeddingSimilarityEvaluator(
-            evaluation_dataset.sentences1, evaluation_dataset.sentences2, evaluation_dataset.scores
+            evaluation_dataset.sentences1.to_list()[0],
+            evaluation_dataset.sentences2.to_list()[0],
+            evaluation_dataset.scores.to_list()[0],
         )
 
     # Create the special denoising dataset that adds noise on-the-fly
@@ -136,9 +144,10 @@ def st_ft(
         steps_per_epoch=50,
     )
 
-    model.save(path=output_path, model_name=model_name)
-    model.save_to_hub(model_name, exist_ok=True)
-    print(f"Model saved to {model_name}-obsidian")
+    if save:
+        model.save(path=output_path, model_name=model_name)
+        model.save_to_hub(model_name, exist_ok=True)
+        print(f"Model saved to {model_name}-obsidian")
 
     # return local model name
     return output_path
@@ -149,12 +158,18 @@ def fine_tune(
     jina: bool = False,
     model_name="sentence-transformers/multi-qa-MiniLM-L6-cos-v1",
     auto: bool = False,
+    epochs: int = 10,
+    evaluation_dataset_path: str = None,
+    save: bool = True,
 ):
     """
     Fine-tune a Sentence Transformer model.
     :param use_wandb: Whether to use wandb.
     :param model_name: Model name.
     :param auto: Whether to fine-tune automatically according to the Obsidian vault changes.
+    :param epochs: Number of epochs.
+    :param evaluation_dataset_path: Path to the evaluation dataset.
+    :param save: Whether to save the model.
     """
     # can't provide model_name with jina
     assert not (jina and model_name), "Can't provide model_name with jina"
@@ -179,7 +194,9 @@ def fine_tune(
 
     if jina:
         return jina_ft(vault, use_wandb)
-    local_model_directory = st_ft(vault, use_wandb, model_name)
+    local_model_directory = st_ft(
+        vault, use_wandb, model_name, epochs, evaluation_dataset_path, save
+    )
     if auto:
         import schedule
 
@@ -187,7 +204,14 @@ def fine_tune(
             # TODO: only ft when enough file content changed
             print("Files changed, fine-tuning...")
             vault = otools.Vault(wkd).connect().gather()
-            st_ft(vault, use_wandb, local_model_directory, epochs=1)
+            st_ft(
+                vault,
+                use_wandb,
+                local_model_directory,
+                epochs=1,
+                evaluation_dataset_path=evaluation_dataset_path,
+                save=True,
+            )
 
         job()
         schedule.every(10).minutes.do(job)
