@@ -45,7 +45,7 @@ model = SentenceTransformer(args.model)
 corpus = []
 document_embeddings = []
 print(f"Loading corpus")
-for k, v in vault.text_index.items():
+for k, v in vault.readable_text_index.items():
     corpus.append(f"File:\n{k}\n\nContent:\n{v}")
 # TODO: refresh corupus embeddings regularly or according to files changed in the vault
 document_embeddings = model.encode(corpus, convert_to_tensor=True, show_progress_bar=True)
