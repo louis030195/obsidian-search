@@ -19,7 +19,7 @@ Eventually some cloud deployment could be imagined.
 ```bash
 virtualenv env
 source env/bin/activate
-pip install sentence-transformers bottle obsidiantools
+pip install sentence-transformers bottle obsidiantools cheroot
 ```
 
 You might need `nltk`data:
@@ -51,6 +51,15 @@ Using [Weights & Biases](https://wandb.ai/site):
 ```bash
 wandb login
 python3 ft.py fine_tune --use_wandb True
+```
+
+### Building the plugin
+
+To generate the `main.js` for Obsidian to use:
+
+```bash
+npm install
+npm build
 ```
 
 ### Jina
